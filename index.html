@@ -1,0 +1,2162 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistik und Data Science &ndash; Klausur Analizi</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #f7f7f9;
+  --bg-elevated: #ffffff;
+  --text: #1c1c22;
+  --text-muted: #5a5a68;
+  --border: #e3e3ea;
+  --accent: #4f46e5;
+  --accent-soft: #eef0ff;
+  --accent-soft-text: #4338ca;
+  --repeat-badge-bg: #fef3c7;
+  --repeat-badge-text: #92400e;
+  --shadow: 0 1px 2px rgba(20,20,30,0.04), 0 8px 24px rgba(20,20,30,0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111116;
+    --bg-elevated: #1a1a22;
+    --text: #ececf1;
+    --text-muted: #a3a3b0;
+    --border: #2c2c36;
+    --accent: #818cf8;
+    --accent-soft: #23233a;
+    --accent-soft-text: #b4bbfa;
+    --repeat-badge-bg: #453a17;
+    --repeat-badge-text: #fcd34d;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #111116;
+  --bg-elevated: #1a1a22;
+  --text: #ececf1;
+  --text-muted: #a3a3b0;
+  --border: #2c2c36;
+  --accent: #818cf8;
+  --accent-soft: #23233a;
+  --accent-soft-text: #b4bbfa;
+  --repeat-badge-bg: #453a17;
+  --repeat-badge-text: #fcd34d;
+  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+}
+:root[data-theme="light"] {
+  --bg: #f7f7f9;
+  --bg-elevated: #ffffff;
+  --text: #1c1c22;
+  --text-muted: #5a5a68;
+  --border: #e3e3ea;
+  --accent: #4f46e5;
+  --accent-soft: #eef0ff;
+  --accent-soft-text: #4338ca;
+  --repeat-badge-bg: #fef3c7;
+  --repeat-badge-text: #92400e;
+  --shadow: 0 1px 2px rgba(20,20,30,0.04), 0 8px 24px rgba(20,20,30,0.06);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 20px 64px;
+}
+
+.hero {
+  padding: 48px 0 28px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.15;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+
+.hero-sub {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 68ch;
+  margin: 0 0 28px;
+}
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.stat {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stat-label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.topnav::-webkit-scrollbar { display: none; }
+
+.topnav a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  flex: none;
+}
+.topnav a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.topic-section {
+  padding: 40px 0 12px;
+  border-top: 1px solid var(--border);
+  scroll-margin-top: 56px;
+}
+.topic-section:first-of-type {
+  border-top: none;
+}
+
+.topic-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.topic-num {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-soft-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.topic-header h2 {
+  margin: 0 0 6px;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+}
+
+.topic-desc {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14.5px;
+  line-height: 1.5;
+  max-width: 70ch;
+}
+
+.note {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 12px 0 0;
+}
+
+.sub-h {
+  font-size: 15px;
+  margin: 28px 0 14px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+
+.card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+.card-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.badge-repeat {
+  background: var(--repeat-badge-bg);
+  color: var(--repeat-badge-text);
+}
+
+.badge-points {
+  background: var(--accent-soft);
+  color: var(--accent-soft-text);
+}
+
+.pills {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  font-size: 11px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
+.all-details {
+  margin: 22px 0 8px;
+}
+
+.all-details summary {
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 8px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin-top: 8px;
+  display: block;
+  overflow-x: auto;
+}
+
+thead th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+td.num {
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.site-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+@media (max-width: 560px) {
+  .hero { padding-top: 28px; }
+  .topic-header { gap: 10px; }
+  .topic-num { width: 32px; height: 32px; font-size: 14px; }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+<header class="hero">
+  <p class="eyebrow">Otto-Friedrich-Universit&auml;t Bamberg &middot; Lehrstuhl f&uuml;r Wirtschaftsinformatik (Staake)</p>
+  <h1>Statistik und Data Science<br>Klausur Analizi</h1>
+  <p class="hero-sub">28 eski s&#305;nav (Klausur 1&ndash;28) tarand&#305;: her s&#305;nav ayn&#305; 8 konu blo&#287;unu ayn&#305; s&#305;rayla i&ccedil;eriyor, ancak her blokta &ccedil;ok say&#305;da farkl&#305; senaryo (soru varyant&#305;) aras&#305;ndan biri kullan&#305;lm&#305;&#351;. A&#351;a&#287;&#305;da s&#305;nav s&#305;ras&#305;na (konu s&#305;ras&#305;na) g&ouml;re her blok i&ccedil;in en s&#305;k tekrarlanan (birebir ayn&#305; senaryoyla 2 farkl&#305; s&#305;navda &ccedil;&#305;kan) sorular, puanlar&#305; ve orijinal s&#305;nav sayfas&#305;ndan kesilmi&#351; g&ouml;r&uuml;nt&uuml;leriyle listeleniyor.</p>
+  <div class="stat-strip hero-stats">
+    <div class="stat"><span class="stat-value">28</span><span class="stat-label">taranan s&#305;nav</span></div>
+    <div class="stat"><span class="stat-value">8</span><span class="stat-label">sabit konu blo&#287;u</span></div>
+    <div class="stat"><span class="stat-value">200</span><span class="stat-label">farkl&#305; soru varyant&#305;</span></div>
+    <div class="stat"><span class="stat-value">51</span><span class="stat-label">tekrar eden grup (%25.5)</span></div>
+    <div class="stat"><span class="stat-value">88&ndash;92</span><span class="stat-label">s&#305;nav toplam puan&#305;</span></div>
+  </div>
+</header>
+
+<nav class="topnav">
+  <a href="#slot-1">1. Kombinatorik</a><a href="#slot-2">2. Bedingte W.</a><a href="#slot-3">3. Mittelwerttests</a><a href="#slot-4">4. Anteile</a><a href="#slot-5">5. Fehlerarten</a><a href="#slot-6">6. Teststärke</a><a href="#slot-7">7. Regression</a><a href="#slot-8">8. Gemischt</a>
+</nav>
+
+<main>
+<section id="slot-1" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">1</span>
+    <div>
+      <h2>Kombinatorik &amp; Grundlagen der Wahrscheinlichkeit</h2>
+      <p class="topic-desc">Sayma yöntemleri: permütasyon, kombinasyon, çekiliş/şifre modelleri ve temel olasılık hesapları.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">23</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">5</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">9–15</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">11.0</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot1_1.png" alt="Initialisierungscode eines Routers" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Initialisierungscode eines Routers</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K12</span><span class="pill">K15</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot1_2.png" alt="Kollisionen bei zufälliger Zuordnung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Kollisionen bei zufälliger Zuordnung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">12 P</span>
+    </div>
+    <div class="pills"><span class="pill">K01</span><span class="pill">K26</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot1_3.png" alt="Konfigurator eines Software-Bundles" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Konfigurator eines Software-Bundles</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">9 P</span>
+    </div>
+    <div class="pills"><span class="pill">K16</span><span class="pill">K27</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot1_4.png" alt="Reihenfolge auf einer Maschine" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Reihenfolge auf einer Maschine</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K07</span><span class="pill">K17</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot1_5.png" alt="Schlüsselwort eines Passwort-Generators" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Schlüsselwort eines Passwort-Generators</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K05</span><span class="pill">K21</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 23 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Initialisierungscode eines Routers</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K12</span><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Kollisionen bei zufälliger Zuordnung</td>
+  <td class="num">12 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K01</span><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Konfigurator eines Software-Bundles</td>
+  <td class="num">9 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K16</span><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Reihenfolge auf einer Maschine</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K07</span><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Schlüsselwort eines Passwort-Generators</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K05</span><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Asset-Tags eines IT-Inventars</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Aufbau eines Projektteams</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Auswahl eines Release-Pakets</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Bereitstellung von Cloud-Instanzen</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K10</span></td>
+</tr><tr>
+  <td>Bewertung bei einem Pitch-Wettbewerb</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Bitfolgen eines Sensors</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Ein Blatt aus dem Skatspiel</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Lieferroboter im Lagergitter</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K13</span></td>
+</tr><tr>
+  <td>Markenname für ein Start-up</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K09</span></td>
+</tr><tr>
+  <td>Paarweise Integrationstests</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Preisvergabe bei einem Hackathon</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Raten in einem Zertifizierungstest</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K04</span></td>
+</tr><tr>
+  <td>Verlosung von Konferenztickets</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K06</span></td>
+</tr><tr>
+  <td>Verteilung von Software-Lizenzen</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Wann darf man einfach abzählen?</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Welches Schema?</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Zwei Würfe eines fairen Würfels</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Zwei Würfel, zwei Modelle</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-2" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">2</span>
+    <div>
+      <h2>Bedingte Wahrscheinlichkeit, Unabhängigkeit &amp; Bayes</h2>
+      <p class="topic-desc">Bedingte Wahrscheinlichkeit, Bayes teoremi, toplam olasılık yasası ve bağımsızlık kontrolleri.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">23</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">5</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">8–12</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">9.9</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot2_6.png" alt="Lieferanten von Solarmodulen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Lieferanten von Solarmodulen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K22</span><span class="pill">K25</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot2_7.png" alt="Lösungsraten zweier Support-Teams" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Lösungsraten zweier Support-Teams</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">12 P</span>
+    </div>
+    <div class="pills"><span class="pill">K20</span><span class="pill">K26</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot2_8.png" alt="Tickets in einem Support-Center" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Tickets in einem Support-Center</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K04</span><span class="pill">K15</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot2_9.png" alt="Unabhängigkeit im Scheduler" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Unabhängigkeit im Scheduler</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">9 P</span>
+    </div>
+    <div class="pills"><span class="pill">K05</span><span class="pill">K09</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot2_10.png" alt="Zwei Features einer App" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Zwei Features einer App</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">9 P</span>
+    </div>
+    <div class="pills"><span class="pill">K23</span><span class="pill">K24</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 23 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Lieferanten von Solarmodulen</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K22</span><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Lösungsraten zweier Support-Teams</td>
+  <td class="num">12 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K20</span><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Tickets in einem Support-Center</td>
+  <td class="num">10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K04</span><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Unabhängigkeit im Scheduler</td>
+  <td class="num">9 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K05</span><span class="pill">K09</span></td>
+</tr><tr>
+  <td>Zwei Features einer App</td>
+  <td class="num">9 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K23</span><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Alarme eines Intrusion-Detection-Systems</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K07</span></td>
+</tr><tr>
+  <td>Auswahl im Bewerbungsverfahren</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Betriebssystem und Absturzhäufigkeit</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K01</span></td>
+</tr><tr>
+  <td>Bug-Schätzung mit zwei Analysewerkzeugen</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K16</span></td>
+</tr><tr>
+  <td>Conversion-Funnel einer Kampagne</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Ereignisse im Logging-System</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Hash-Treffer in der IT-Forensik mit niedriger Basisrate</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Health-Check von Serverknoten</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Klassifikation anhand eines Merkmals</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Newsletter und Kaufverhalten</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Redundante Backups</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K10</span></td>
+</tr><tr>
+  <td>Server unter Last</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K12</span></td>
+</tr><tr>
+  <td>Streaming-Nutzung</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Test von Festplatten</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K06</span></td>
+</tr><tr>
+  <td>Verfügbarkeit dreier Dienste</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr><tr>
+  <td>Zwei Geräte, mindestens eines mit Android</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Zwei Sichtweisen auf Wahrscheinlichkeit</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K13</span></td>
+</tr><tr>
+  <td>Zwei Zufallszahlengeneratoren</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K17</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-3" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">3</span>
+    <div>
+      <h2>Hypothesentests für Mittelwerte (t-Test / z-Test)</h2>
+      <p class="topic-desc">Bir örneklemli ortalama testleri: t-Test / z-Test, güven aralıkları, hipotez kurma ve hatalı analiz eleştirisi.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">27</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">1</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">8–17</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">14.7</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot3_11.png" alt="Verweildauer zweier Seitenvarianten" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Verweildauer zweier Seitenvarianten</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">16 P</span>
+    </div>
+    <div class="pills"><span class="pill">K12</span><span class="pill">K13</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 27 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Verweildauer zweier Seitenvarianten</td>
+  <td class="num">16 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K12</span><span class="pill">K13</span></td>
+</tr><tr>
+  <td>Antwortzeit einer API</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Antwortzeiten aus Rohdaten</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Bearbeitungszeit nach einer Schulung</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K06</span></td>
+</tr><tr>
+  <td>Bearbeitungszeiten von Support-Tickets</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Build-Zeit vor und nach einer Umstellung</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Durchlaufzeit nach einer Prozessänderung</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Durchsatz zweier Server-Konfigurationen</td>
+  <td class="num">17 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Eine fehlerhafte Auswertung</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K01</span></td>
+</tr><tr>
+  <td>Energieverbrauch nach Optimierung</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Hintergrund der t-Verteilung</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Hypothesen richtig aufstellen</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Kalibrierung eines Drucksensors</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K05</span></td>
+</tr><tr>
+  <td>Konfidenzintervall für die Akkulaufzeit</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Konfidenzniveau und Intervallbreite</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Ladezeiten vor und nach einem Update (Rohdaten)</td>
+  <td class="num">17 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Latenz zweier Rechenzentren</td>
+  <td class="num">17 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K16</span></td>
+</tr><tr>
+  <td>Leistung von Solarmodulen</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Servertemperatur aus Rohdaten</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K04</span></td>
+</tr><tr>
+  <td>Taktfrequenz eines Chips</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Viele Tests auf denselben Daten</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K07</span></td>
+</tr><tr>
+  <td>Voraussetzungen, Freiheitsgrade und Vorgehen</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Welcher Test passt?</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K09</span></td>
+</tr><tr>
+  <td>Zwei Compiler-Versionen</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K10</span></td>
+</tr><tr>
+  <td>Zwei Teams mit ungleichen Streuungen</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>p-Wert bei einem Speichertest</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K27</span></td>
+</tr><tr>
+  <td>t-Test oder z-Test?</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-4" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">4</span>
+    <div>
+      <h2>Anteile: Hypothesentest, Konfidenzintervall &amp; Stichprobenumfang</h2>
+      <p class="topic-desc">Oran (Anteil) testleri, güven aralıkları ve gerekli örneklem büyüklüğü hesapları.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">22</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">6</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">9–14</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">12.6</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot4_12.png" alt="Anteilsschätzung und Genauigkeit" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Anteilsschätzung und Genauigkeit</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">14 P</span>
+    </div>
+    <div class="pills"><span class="pill">K05</span><span class="pill">K20</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot4_13.png" alt="Eine fehlerhafte Anteilsauswertung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Eine fehlerhafte Anteilsauswertung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">13 P</span>
+    </div>
+    <div class="pills"><span class="pill">K01</span><span class="pill">K21</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot4_14.png" alt="Erfolgsquote eines Anbieters" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Erfolgsquote eines Anbieters</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">13 P</span>
+    </div>
+    <div class="pills"><span class="pill">K16</span><span class="pill">K19</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot4_15.png" alt="Ergebnis einer großen Erhebung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Ergebnis einer großen Erhebung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">13 P</span>
+    </div>
+    <div class="pills"><span class="pill">K09</span><span class="pill">K27</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot4_16.png" alt="Nutzung einer Softwarefunktion" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Nutzung einer Softwarefunktion</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">13 P</span>
+    </div>
+    <div class="pills"><span class="pill">K07</span><span class="pill">K18</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot4_17.png" alt="Stichprobenumfang bei bekannter Vorschätzung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Stichprobenumfang bei bekannter Vorschätzung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">13 P</span>
+    </div>
+    <div class="pills"><span class="pill">K06</span><span class="pill">K14</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 22 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Anteilsschätzung und Genauigkeit</td>
+  <td class="num">14 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K05</span><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Eine fehlerhafte Anteilsauswertung</td>
+  <td class="num">13 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K01</span><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Erfolgsquote eines Anbieters</td>
+  <td class="num">13 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K16</span><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Ergebnis einer großen Erhebung</td>
+  <td class="num">13 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K09</span><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Nutzung einer Softwarefunktion</td>
+  <td class="num">13 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K07</span><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Stichprobenumfang bei bekannter Vorschätzung</td>
+  <td class="num">13 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K06</span><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Behandlungserfolg in zwei Gruppen</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K13</span></td>
+</tr><tr>
+  <td>Defekte Bauteile</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Erfolgsanteile zweier Gruppen</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Historische Fehlerrate in der Fertigung</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K10</span></td>
+</tr><tr>
+  <td>Klickrate einer neuen Gestaltung</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Konfidenzintervall richtig deuten</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K04</span></td>
+</tr><tr>
+  <td>Marktanteil eines neuen Online-Dienstes</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Planung einer Umfrage</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Signifikanz und Relevanz bei großem n</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Test und Konfidenzintervall im Vergleich</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K12</span></td>
+</tr><tr>
+  <td>Verbreitung von Smart Metern</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Vergleich zweier Conversion-Raten</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Voraussetzungen und Grenzen der Approximation</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr><tr>
+  <td>Zustimmung in einer Umfrage</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Zwei Berechnungen eines Standardfehlers</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Zwei Verfahren zum Vergleich von Anteilen</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K25</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-5" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">5</span>
+    <div>
+      <h2>Fehler 1. und 2. Art / Testlogik</h2>
+      <p class="topic-desc">1. ve 2. tip hata, test mantığı, H0/H1 formülasyonu ve gerçek hayat analojileri (mahkeme, tıbbi tarama vb.).</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">23</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">5</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">8–12</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">9.5</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot5_18.png" alt="Entscheidungen in einem Hypothesentest" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Entscheidungen in einem Hypothesentest</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K07</span><span class="pill">K15</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot5_19.png" alt="Medizinischer Screeningtest" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Medizinischer Screeningtest</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">9 P</span>
+    </div>
+    <div class="pills"><span class="pill">K05</span><span class="pill">K09</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot5_20.png" alt="Planung eines Hypothesentests" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Planung eines Hypothesentests</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K12</span><span class="pill">K27</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot5_21.png" alt="Welche Aussage wird zur Nullhypothese?" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Welche Aussage wird zur Nullhypothese?</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K04</span><span class="pill">K06</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot5_22.png" alt="Zwei kritische Grenzen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Zwei kritische Grenzen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K18</span><span class="pill">K24</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 23 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Entscheidungen in einem Hypothesentest</td>
+  <td class="num">10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K07</span><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Medizinischer Screeningtest</td>
+  <td class="num">9 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K05</span><span class="pill">K09</span></td>
+</tr><tr>
+  <td>Planung eines Hypothesentests</td>
+  <td class="num">10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K12</span><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Welche Aussage wird zur Nullhypothese?</td>
+  <td class="num">10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K04</span><span class="pill">K06</span></td>
+</tr><tr>
+  <td>Zwei kritische Grenzen</td>
+  <td class="num">10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K18</span><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Analogie zur Rechtsprechung</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Aussagen zu Fehlern und Teststärke prüfen</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Auswertung einer Studie</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Auswertung eines nicht signifikanten Ergebnisses</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Betrugserkennung</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Die beiden Verteilungen skizzieren</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Ein rechtsseitiger Gauß-Test</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Ergebnisse wiederholter Tests</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K01</span></td>
+</tr><tr>
+  <td>Fehlerarten beim zweiseitigen Test</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Klassifikator: Fehlerraten</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K10</span></td>
+</tr><tr>
+  <td>Planung einer größeren Studie</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Qualitätskontrolle einer Charge</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K16</span></td>
+</tr><tr>
+  <td>Seltene Ereignisse und Fehlalarme</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Spam-Filter</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Test entwerfen und Fehler kontrollieren</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr><tr>
+  <td>Viele Studien ohne echten Effekt</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Wahl des Signifikanzniveaus</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Zusammenspiel der beiden Fehlerwahrscheinlichkeiten</td>
+  <td class="num">8 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K13</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-6" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">6</span>
+    <div>
+      <h2>Teststärke (Power) &amp; Stichprobenumfangsplanung</h2>
+      <p class="topic-desc">Teststärke (Power) hesapları ve örneklem büyüklüğü planlaması.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">20</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">8</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">8–12</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">10.2</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot6_23.png" alt="Ein- und zweiseitige Planung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Ein- und zweiseitige Planung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">8 P</span>
+    </div>
+    <div class="pills"><span class="pill">K16</span><span class="pill">K20</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_24.png" alt="Eine Teststärkeanalyse entwerfen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Eine Teststärkeanalyse entwerfen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K09</span><span class="pill">K25</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_25.png" alt="Notwendiger Stichprobenumfang (eine Stichprobe)" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Notwendiger Stichprobenumfang (eine Stichprobe)</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">12 P</span>
+    </div>
+    <div class="pills"><span class="pill">K08</span><span class="pill">K19</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_26.png" alt="Post-hoc-Power kritisch einordnen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Post-hoc-Power kritisch einordnen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K07</span><span class="pill">K14</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_27.png" alt="Power bei unterschiedlichem Effekt" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Power bei unterschiedlichem Effekt</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">9 P</span>
+    </div>
+    <div class="pills"><span class="pill">K22</span><span class="pill">K27</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_28.png" alt="Power eines gepaarten gegenüber einem ungepaarten Test" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Power eines gepaarten gegenüber einem ungepaarten Test</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">8 P</span>
+    </div>
+    <div class="pills"><span class="pill">K06</span><span class="pill">K15</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_29.png" alt="Power numerisch über die Z-Transformation" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Power numerisch über die Z-Transformation</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K10</span><span class="pill">K13</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot6_30.png" alt="Stichprobenumfang und Stellschrauben" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Stichprobenumfang und Stellschrauben</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">11 P</span>
+    </div>
+    <div class="pills"><span class="pill">K01</span><span class="pill">K17</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 20 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Ein- und zweiseitige Planung</td>
+  <td class="num">8 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K16</span><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Eine Teststärkeanalyse entwerfen</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K09</span><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Notwendiger Stichprobenumfang (eine Stichprobe)</td>
+  <td class="num">12 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K08</span><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Post-hoc-Power kritisch einordnen</td>
+  <td class="num">10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K07</span><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Power bei unterschiedlichem Effekt</td>
+  <td class="num">9 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K22</span><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Power eines gepaarten gegenüber einem ungepaarten Test</td>
+  <td class="num">8 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K06</span><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Power numerisch über die Z-Transformation</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K10</span><span class="pill">K13</span></td>
+</tr><tr>
+  <td>Stichprobenumfang und Stellschrauben</td>
+  <td class="num">11 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K01</span><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Begriff und formale Definition</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Effektstärke und ihr Einfluss auf die Power</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Fallzahl bei höherer Power</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Gepoolte Standardabweichung für d</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K12</span></td>
+</tr><tr>
+  <td>Minimal erkennbarer Effekt</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Notwendiger Stichprobenumfang (zwei Gruppen)</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Power als Fläche skizzieren</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Power eines Zwei-Gruppen-Tests berechnen</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K04</span></td>
+</tr><tr>
+  <td>Power und β verknüpfen</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Teststärke beim Anteilstest</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Zwei Zwecke einer Teststärkeanalyse</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Zweiseitige gegen einseitige Fallzahl</td>
+  <td class="num">10 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K05</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-7" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">7</span>
+    <div>
+      <h2>Lineare Regression</h2>
+      <p class="topic-desc">Basit ve çoklu doğrusal regresyon: katsayı yorumlama, R², artık (residual) analizi, dummy değişkenler.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">27</span><span class="stat-label">farklı soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">1</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">9–16</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">13.1</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  
+  <h3 class="sub-h">En çok tekrar eden sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot7_31.png" alt="Residuen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Residuen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">9–10 P</span>
+    </div>
+    <div class="pills"><span class="pill">K13</span><span class="pill">K26</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 27 soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Residuen</td>
+  <td class="num">9–10 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K13</span><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Annahmen der linearen Regression</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K04</span></td>
+</tr><tr>
+  <td>Bestimmtheitsmaß interpretieren</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Binäre Dummy-Variable</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K02</span></td>
+</tr><tr>
+  <td>Brände in einer Stadt</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Der Steigungsschätzer als Zufallsvariable</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Dummy-Variablen interpretieren</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Duschdauer und Wasserverbrauch: manuelle Schätzung</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K09</span></td>
+</tr><tr>
+  <td>Ein geschätzter Steigungskoeffizient</td>
+  <td class="num">11 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Ein unauffälliger Residuenplot</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr><tr>
+  <td>Eine fehlerhafte Regressionsauswertung</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Einheiten und Standardisierung</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K06</span></td>
+</tr><tr>
+  <td>Freiheitsgrade und Stichprobengröße</td>
+  <td class="num">9 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K12</span></td>
+</tr><tr>
+  <td>Hohe Anpassung, auffällige Residuen</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Kalorien und Kohlenhydrate: R-Ausgabe deuten</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K15</span></td>
+</tr><tr>
+  <td>Lernzeit und Klausurergebnis</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Linearität in den Parametern</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Mehrere Dummy-Variablen interpretieren</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Mehrfachregression: Prognose mit gegebenen Variablen</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Niederschlagsmenge: R-Ausgabe lesen</td>
+  <td class="num">12 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Sportstunden und Gesundheit</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K10</span></td>
+</tr><tr>
+  <td>Steigung interpretieren und prognostizieren</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Vier Diagnosegrafiken</td>
+  <td class="num">14 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K01</span></td>
+</tr><tr>
+  <td>Zwei Intervalle bei festem x</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K16</span></td>
+</tr><tr>
+  <td>Zwei Modelle für dieselbe Zielgröße</td>
+  <td class="num">15 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Zwei Modelle im Vergleich</td>
+  <td class="num">13 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K05</span></td>
+</tr><tr>
+  <td>Zwei stark korrelierte Prädiktoren</td>
+  <td class="num">16 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K07</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section><section id="slot-8" class="topic-section">
+  <div class="topic-header">
+    <span class="topic-num">8</span>
+    <div>
+      <h2>Gemischte Grundlagenaufgaben (Verteilungen, Kennzahlen, Mengenlehre)</h2>
+      <p class="topic-desc">Her sınavda 2 farklı alt konudan oluşan karışık temel sorular: dağılımlar, beklenen değer/varyans, tanımlayıcı istatistik, küme işlemleri.</p>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-value">35</span><span class="stat-label">farklı alt soru varyantı</span></div>
+    <div class="stat"><span class="stat-value">20</span><span class="stat-label">tekrar eden grup</span></div>
+    <div class="stat"><span class="stat-value">6–12</span><span class="stat-label">puan aralığı (görev toplamı)</span></div>
+    <div class="stat"><span class="stat-value">9.1</span><span class="stat-label">ortalama puan</span></div>
+  </div>
+  <p class="note">Bu görevin başlığı ("Gemischte Aufgaben") her sınavda aynı; asıl çeşitlilik alt sorularda. Bu yüzden burada alt sorular listeleniyor.</p>
+  <h3 class="sub-h">En çok tekrar eden alt sorular</h3>
+  <div class="card-grid">
+    <div class="card">
+  <img src="images/slot8sub_32.png" alt="Anwendung Vergütung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Anwendung Vergütung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">3 P</span>
+    </div>
+    <div class="pills"><span class="pill">K14</span><span class="pill">K22</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_33.png" alt="Boxplot und Ausreißer" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Boxplot und Ausreißer</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">6 P</span>
+    </div>
+    <div class="pills"><span class="pill">K05</span><span class="pill">K16</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_34.png" alt="Boxplots vergleichen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Boxplots vergleichen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">3 P</span>
+    </div>
+    <div class="pills"><span class="pill">K24</span><span class="pill">K28</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_35.png" alt="Callcenter" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Callcenter</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K25</span><span class="pill">K27</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_36.png" alt="Dichte gegeben" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Dichte gegeben</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">4 P</span>
+    </div>
+    <div class="pills"><span class="pill">K13</span><span class="pill">K16</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_37.png" alt="Diskreter Erwartungswert" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Diskreter Erwartungswert</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K04</span><span class="pill">K21</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_38.png" alt="Ereignisse übersetzen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Ereignisse übersetzen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">4 P</span>
+    </div>
+    <div class="pills"><span class="pill">K01</span><span class="pill">K24</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_39.png" alt="Herleitung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Herleitung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">7 P</span>
+    </div>
+    <div class="pills"><span class="pill">K09</span><span class="pill">K12</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_40.png" alt="Hypergeometrische Verteilung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Hypergeometrische Verteilung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">6 P</span>
+    </div>
+    <div class="pills"><span class="pill">K15</span><span class="pill">K28</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_41.png" alt="Linearität anwenden" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Linearität anwenden</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">2 P</span>
+    </div>
+    <div class="pills"><span class="pill">K10</span><span class="pill">K17</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_42.png" alt="Mengenoperationen" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Mengenoperationen</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K06</span><span class="pill">K13</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_43.png" alt="Notrufe" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Notrufe</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K02</span><span class="pill">K20</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_44.png" alt="Quantile einer Gleichverteilung" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Quantile einer Gleichverteilung</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">6 P</span>
+    </div>
+    <div class="pills"><span class="pill">K15</span><span class="pill">K27</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_45.png" alt="Quartile eines Datensatzes" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Quartile eines Datensatzes</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">6 P</span>
+    </div>
+    <div class="pills"><span class="pill">K04</span><span class="pill">K21</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_46.png" alt="Rechenregeln der Varianz" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Rechenregeln der Varianz</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">4 P</span>
+    </div>
+    <div class="pills"><span class="pill">K03</span><span class="pill">K19</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_47.png" alt="Schiefe vermuten" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Schiefe vermuten</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">4 P</span>
+    </div>
+    <div class="pills"><span class="pill">K07</span><span class="pill">K22</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_48.png" alt="Standardfehler" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Standardfehler</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K06</span><span class="pill">K11</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_49.png" alt="Standardisieren" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Standardisieren</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K08</span><span class="pill">K23</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_50.png" alt="Verteilungsfunktion diskret" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Verteilungsfunktion diskret</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">4 P</span>
+    </div>
+    <div class="pills"><span class="pill">K10</span><span class="pill">K25</span></div>
+  </div>
+</div>
+<div class="card">
+  <img src="images/slot8sub_51.png" alt="Würfeln bis zur ersten Sechs" loading="lazy">
+  <div class="card-body">
+    <div class="card-title">Würfeln bis zur ersten Sechs</div>
+    <div class="card-meta">
+      <span class="badge badge-repeat">2× tekrar</span>
+      <span class="badge badge-points">5 P</span>
+    </div>
+    <div class="pills"><span class="pill">K11</span><span class="pill">K23</span></div>
+  </div>
+</div>
+  </div>
+  <details class="all-details">
+    <summary>Tüm 35 alt soru varyantını göster (1 kez görülenler dahil)</summary>
+    <table>
+<thead><tr><th>Soru</th><th>Puan</th><th>Tekrar</th><th>Sınavlar</th></tr></thead>
+<tbody><tr>
+  <td>Anwendung Vergütung</td>
+  <td class="num">3 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K14</span><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Boxplot und Ausreißer</td>
+  <td class="num">6 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K05</span><span class="pill">K16</span></td>
+</tr><tr>
+  <td>Boxplots vergleichen</td>
+  <td class="num">3 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K24</span><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Callcenter</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K25</span><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Dichte gegeben</td>
+  <td class="num">4 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K13</span><span class="pill">K16</span></td>
+</tr><tr>
+  <td>Diskreter Erwartungswert</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K04</span><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Ereignisse übersetzen</td>
+  <td class="num">4 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K01</span><span class="pill">K24</span></td>
+</tr><tr>
+  <td>Herleitung</td>
+  <td class="num">7 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K09</span><span class="pill">K12</span></td>
+</tr><tr>
+  <td>Hypergeometrische Verteilung</td>
+  <td class="num">6 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K15</span><span class="pill">K28</span></td>
+</tr><tr>
+  <td>Linearität anwenden</td>
+  <td class="num">2 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K10</span><span class="pill">K17</span></td>
+</tr><tr>
+  <td>Mengenoperationen</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K06</span><span class="pill">K13</span></td>
+</tr><tr>
+  <td>Notrufe</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K02</span><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Quantile einer Gleichverteilung</td>
+  <td class="num">6 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K15</span><span class="pill">K27</span></td>
+</tr><tr>
+  <td>Quartile eines Datensatzes</td>
+  <td class="num">6 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K04</span><span class="pill">K21</span></td>
+</tr><tr>
+  <td>Rechenregeln der Varianz</td>
+  <td class="num">4 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K03</span><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Schiefe vermuten</td>
+  <td class="num">4 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K07</span><span class="pill">K22</span></td>
+</tr><tr>
+  <td>Standardfehler</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K06</span><span class="pill">K11</span></td>
+</tr><tr>
+  <td>Standardisieren</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K08</span><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Verteilungsfunktion diskret</td>
+  <td class="num">4 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K10</span><span class="pill">K25</span></td>
+</tr><tr>
+  <td>Würfeln bis zur ersten Sechs</td>
+  <td class="num">5 P</td>
+  <td class="num">2×</td>
+  <td><span class="pill">K11</span><span class="pill">K23</span></td>
+</tr><tr>
+  <td>Achtseitiger Würfel</td>
+  <td class="num">4 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Ampeln</td>
+  <td class="num">6 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K05</span></td>
+</tr><tr>
+  <td>Bauteil</td>
+  <td class="num">3 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K08</span></td>
+</tr><tr>
+  <td>Drei Funktionen abgrenzen</td>
+  <td class="num">5 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K19</span></td>
+</tr><tr>
+  <td>Drei Lagemaße berechnen</td>
+  <td class="num">4 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K12</span></td>
+</tr><tr>
+  <td>Geeignetes Lagemaß wählen</td>
+  <td class="num">3 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K09</span></td>
+</tr><tr>
+  <td>Mittelwert bei Ordinaldaten</td>
+  <td class="num">3 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K20</span></td>
+</tr><tr>
+  <td>Mittelwert vs. Median</td>
+  <td class="num">4 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Mittelwert über Median</td>
+  <td class="num">3 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K14</span></td>
+</tr><tr>
+  <td>Qualitätskontrolle</td>
+  <td class="num">6 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K01</span></td>
+</tr><tr>
+  <td>Server</td>
+  <td class="num">4 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K26</span></td>
+</tr><tr>
+  <td>Skalen zuordnen</td>
+  <td class="num">4 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K18</span></td>
+</tr><tr>
+  <td>Stetiger Erwartungswert</td>
+  <td class="num">5 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K07</span></td>
+</tr><tr>
+  <td>Suchanfrage</td>
+  <td class="num">4 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K03</span></td>
+</tr><tr>
+  <td>Ziehungsverfahren beurteilen</td>
+  <td class="num">5 P</td>
+  <td class="num">1×</td>
+  <td><span class="pill">K17</span></td>
+</tr></tbody>
+</table>
+  </details>
+</section>
+</main>
+
+<footer class="site-footer">
+  <p>Kaynak: Klausuren-20260719 klas&ouml;r&uuml;ndeki 28 s&#305;nav PDF&#39;i (+ 1 kullan&#305;lmam&#305;&#351; g&ouml;rev rezervi, bu sayfaya dahil edilmedi). Otomatik metin/konum analizi ile olu&#351;turulmu&#351;tur &mdash; olas&#305; ay&#305;klama hatalar&#305; i&ccedil;in orijinal PDF&#39;lerle kar&#351;&#305;la&#351;t&#305;r&#305;n.</p>
+</footer>
+</div>
+
+</body>
+</html>
